@@ -4,6 +4,7 @@ from app.schemas import quiz as schemas
 from app.crud import quiz as crud
 from app.database import SessionLocal
 
+
 router = APIRouter()
 
 def get_db():
