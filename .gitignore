@@ -1,0 +1,59 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+.env.*
+
+# IDEs and editor configs
+.vscode/
+.idea/
+*.swp
+
+# Logs and coverage
+*.log
+*.coverage
+coverage.xml
+htmlcov/
+
+# Test cache
+.pytest_cache/
+.tox/
+
+# MyPy
+.mypy_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Database
+*.sqlite3
+
+# Docker
+*.pid
+*.db
+*.sock
+docker-compose.override.yml
+
+# Alembic (if using migrations)
+alembic/versions/*.pyc
+
+# Local Postgres volume
+pgdata/
+
+# Jupyter notebooks
+*.ipynb_checkpoints
+
+# Node (if frontend in same repo)
+node_modules/
+npm-debug.log
+
+# Python-specific cache
+*.pyo
+*.pyd
+.Python
