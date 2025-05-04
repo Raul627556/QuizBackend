@@ -1,5 +1,15 @@
 from fastapi import FastAPI
-from app.api import quiz
+from app.database import init_db
+from app.api import api_router
 
-app = FastAPI()
-app.include_router(quiz.router, prefix="/api")
+app = FastAPI(title="Quiz App")
+
+@app.on_event("startup")
+def startup():
+    init_db()
+
+app.include_router(api_router)
+
+@app.get("/")
+def read_root():
+    return {"message": "Quiz API funcionando"}
