@@ -4,6 +4,7 @@ from app.schemas.question import QuestionCreate, QuestionRead
 from app.models.question import Question
 from app.models.answer import Answer
 from app.database import SessionLocal
+from typing import List
 
 router = APIRouter(prefix="/questions", tags=["Questions"])
 
@@ -23,7 +24,10 @@ def create_question(question: QuestionCreate, db: Session = Depends(get_db)):
     if sum(a.is_correct for a in question.answers) != 1:
         raise HTTPException(status_code=400, detail="Debe haber UNA única respuesta correcta.")
 
-    db_question = Question(text=question.text)
+    db_question = Question(
+        text=question.text,
+        category_id=question.category_id
+    )
     db.add(db_question)
     db.commit()
     db.refresh(db_question)
@@ -48,3 +52,10 @@ def get_question(question_id: int, db: Session = Depends(get_db)):
     if not question:
         raise HTTPException(status_code=404, detail="Pregunta no encontrada")
     return question
+
+@router.get("/by-category/{category_id}", response_model=List[QuestionRead])
+def get_questions_by_category(category_id: int, db: Session = Depends(get_db)):
+    questions = db.query(Question).filter(Question.category_id == category_id).all()
+    if not questions:
+        raise HTTPException(status_code=404, detail="No se encontraron preguntas para esta categoría.")
+    return questions

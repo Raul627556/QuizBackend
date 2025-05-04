@@ -12,3 +12,9 @@ Base = declarative_base()
 def init_db():
     from app.models import question, answer  # importa los modelos para que Base los registre
     Base.metadata.create_all(bind=engine)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

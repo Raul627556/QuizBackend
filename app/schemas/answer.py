@@ -5,7 +5,7 @@ class AnswerBase(BaseModel):
     is_correct: bool
 
 class AnswerCreate(AnswerBase):
-    question_id: int
+    pass
 
 class AnswerRead(AnswerBase):
     id: int
