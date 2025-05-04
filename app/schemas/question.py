@@ -1,28 +1,18 @@
 from typing import List, Optional
 from pydantic import BaseModel
+from .answer import AnswerCreate, AnswerRead
 
-class AnswerBase(BaseModel):
-    text: str
-    is_correct: bool
-
-class AnswerCreate(AnswerBase):
-    pass
-
-class AnswerRead(AnswerBase):
-    id: int
-
-    class Config:
-        orm_mode = True
 
 class QuestionBase(BaseModel):
     text: str
 
 class QuestionCreate(QuestionBase):
-    answers: List[AnswerCreate]  # Al crear una pregunta, se envían las 4 respuestas
+    category_id: int
+    answers: List[AnswerCreate]
 
 class QuestionRead(QuestionBase):
     id: int
-    answers: List[AnswerRead]  # Al leer una pregunta, se devuelven sus respuestas
+    answers: List[AnswerRead]
 
     class Config:
         orm_mode = True
