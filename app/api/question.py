@@ -3,12 +3,13 @@ from sqlalchemy.orm import Session
 from app.schemas.question import QuestionCreate, QuestionRead
 from app.models.question import Question
 from app.models.answer import Answer
+from app.models.user import User
 from app.database import SessionLocal
+from app.api.deps import get_current_user
 from typing import List
 
 router = APIRouter(prefix="/questions", tags=["Questions"])
 
-# Dependency para obtener la DB session
 def get_db():
     db = SessionLocal()
     try:
@@ -17,7 +18,11 @@ def get_db():
         db.close()
 
 @router.post("/", response_model=QuestionRead)
-def create_question(question: QuestionCreate, db: Session = Depends(get_db)):
+def create_question(
+    question: QuestionCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     if len(question.answers) != 4:
         raise HTTPException(status_code=400, detail="Debe haber exactamente 4 respuestas.")
 
@@ -43,18 +48,29 @@ def create_question(question: QuestionCreate, db: Session = Depends(get_db)):
     return db_question
 
 @router.get("/", response_model=list[QuestionRead])
-def get_questions(db: Session = Depends(get_db)):
+def get_questions(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     return db.query(Question).all()
 
 @router.get("/{question_id}", response_model=QuestionRead)
-def get_question(question_id: int, db: Session = Depends(get_db)):
+def get_question(
+    question_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:
         raise HTTPException(status_code=404, detail="Pregunta no encontrada")
     return question
 
 @router.get("/by-category/{category_id}", response_model=List[QuestionRead])
-def get_questions_by_category(category_id: int, db: Session = Depends(get_db)):
+def get_questions_by_category(
+    category_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     questions = db.query(Question).filter(Question.category_id == category_id).all()
     if not questions:
         raise HTTPException(status_code=404, detail="No se encontraron preguntas para esta categoría.")
