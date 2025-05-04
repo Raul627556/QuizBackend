@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from .. import crud, schemas
 from ..database import get_db
-from ..api.deps import get_current_user  # Asegúrate de importar esto
+from ..api.deps import get_current_user
 from ..models.user import User
 
 router = APIRouter(prefix="/categories", tags=["categories"])
